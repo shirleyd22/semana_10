@@ -29,7 +29,7 @@ def main():
                 cantidad=int(input("Ingrese el cantidad de producto: "))
                 precio=float(input("Ingrese el precio del producto: "))
                 #se crea el objeto producto
-                producto = Producto(id,nombre,cantidad,precio)
+                producto = Producto(id,nombre,precio, cantidad)
                 #se lo añade al inventario
                 inventario.add_producto(producto)
             except ValueError:

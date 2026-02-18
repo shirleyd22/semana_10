@@ -1,7 +1,7 @@
 #la clase Productos representa cada postre o producto que se vende en la pasteleria
 
 class Producto:
-    def __init__(self, id, nombre, cantidad, precio):
+    def __init__(self, id, nombre, precio, cantidad):
         """
         constructor de la clase Producto
         este se ejecuta automaticamente cuando se crea

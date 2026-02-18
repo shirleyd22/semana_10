@@ -10,7 +10,56 @@ class Inventario:
         se crea una lista vacia donde se almacenaran los productos
         """
         self.productos = []
-    #metodo para añadir producto
+        self.cargar_desde_archivo() #se carga automaticamebte al iniciar
+
+    def cargar_desde_archivo(self):
+        """
+        se cargan los productos desde el archivo inventario.txt
+        si este archivo no existe, lo crea automaticamente
+
+        """
+        try:
+            with open("inventario.txt","r") as archivo:
+                for linea in archivo:
+                    datos = linea.strip().split(",")
+                    #validamos que la linea tenga los 4 datos necesarios
+                    if len (datos) == 4:
+                        id_producto = datos[0]
+                        nombre = datos[1]
+                        precio = float(datos[2])
+                        cantidad = float(datos[3])
+
+                        #creamos el objeto producto
+                        producto = Producto(id_producto, nombre, precio, cantidad)
+                        self.productos.append(producto)
+            print("inventario cargado correctamente desde el archivo")
+        except FileNotFoundError:
+            #si el archivo no existe, lo crea automaticamente
+            open("inventario.txt","w").close()
+            print("archivo inventario.txt creado porque no existia")
+        except PermissionError:
+            print("error: no tienes permisos para leer este archivo")
+        except Exception as e:
+            print(f"error inesperado al cargar el archivo: {e}")
+
+    def guardar_en_archivo(self):
+        """
+        se guardan todos los productos actuales en el archivo inventario.txt
+        sobrescribe el contenido cada vez que se llama
+
+        """
+        try:
+            with open("inventario.txt","w") as archivo:
+                for p in self.productos:
+                    linea =f"{p.get_id()},{p.get_nombre()},{p.get_precio()},{p.get_cantidad()} \n"
+                    archivo.write(linea)
+            print("cambios guardados correctamente en el archivo")
+        except PermissionError:
+            print("error: no tienes permisos para escribir este archivo")
+        except Exception as e:
+            print(f"error inesperado al guardar el archivo: {e}")
+
+        #metodo para añadir producto
     def add_producto(self, producto):
         """
         añade un nuevo producto al inventario
@@ -23,6 +72,7 @@ class Inventario:
                 #se sale del metodo si el ID esta repetido
         #si el ID no esta repetido se lo agrega
         self.productos.append(producto)
+        self.guardar_en_archivo()
         print("producto agregado correctamente")
     #metodo para buscar productos
     def buscar_producto(self, nombre):
